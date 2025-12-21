@@ -9,8 +9,11 @@ const storage = new CloudinaryStorage({
 
     return {
       folder: req.uploadFolder || "gram-panchayat",
-      resource_type: isImage ? "image" : "raw", // ✅ PDF/DOC support
-      public_id: `${Date.now()}-${file.originalname}`,
+      resource_type: isImage ? "image" : "raw", // ✅ image / pdf / doc
+      public_id: `${Date.now()}-${file.originalname
+        .split(".")
+        .slice(0, -1)
+        .join(".")}`, // ✅ SAFE ID
     };
   },
 });
@@ -28,14 +31,14 @@ const fileFilter = (req, file, cb) => {
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("Only images or documents allowed"), false);
+    cb(new Error("Only images or PDF/DOC files allowed"), false);
   }
 };
 
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 }, // ✅ 2MB
+  limits: { fileSize: 5 * 1024 * 1024 }, // ✅ 5MB
 });
 
 module.exports = upload;

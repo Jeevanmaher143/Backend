@@ -1,46 +1,44 @@
 const express = require("express");
 const router = express.Router();
-const { protect, adminOnly } = require("../middlewares/authMiddleware");
+
+const authMiddleware = require("../middlewares/authMiddleware");
 const upload = require("../middlewares/uploadMiddleware");
 
-const {
-  addNotice,
-  getAllNotices,
-  updateNotice,
-  deleteNotice,
-} = require("../controllers/noticeController");
+const noticeController = require("../controllers/noticeController");
 
 // ================= PUBLIC =================
-router.get("/", getAllNotices);
+router.get("/", noticeController.getAllNotices);
 
 // ================= ADMIN =================
-
-// ADD NOTICE
 router.post(
   "/",
-  protect,
-  adminOnly,
+  authMiddleware.protect,
+  authMiddleware.adminOnly,
   (req, res, next) => {
-    req.uploadFolder = "notices"; // ✅ REQUIRED
+    req.uploadFolder = "notices";
     next();
   },
   upload.single("attachment"),
-  addNotice
+  noticeController.addNotice
 );
 
 router.put(
   "/:id",
-  protect,
-  adminOnly,
+  authMiddleware.protect,
+  authMiddleware.adminOnly,
   (req, res, next) => {
-    req.uploadFolder = "notices"; // ✅ REQUIRED
+    req.uploadFolder = "notices";
     next();
   },
   upload.single("attachment"),
-  updateNotice
+  noticeController.updateNotice
 );
 
-// DELETE NOTICE
-router.delete("/:id", protect, adminOnly, deleteNotice);
+router.delete(
+  "/:id",
+  authMiddleware.protect,
+  authMiddleware.adminOnly,
+  noticeController.deleteNotice
+);
 
 module.exports = router;

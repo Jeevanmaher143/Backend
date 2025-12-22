@@ -1,27 +1,21 @@
 const Notice = require("../models/Notice");
 
-// ================= ADD NOTICE (WITH FILE) =================
+// ================= ADD NOTICE =================
 exports.addNotice = async (req, res) => {
   try {
-    console.log("BODY:", req.body);
-    console.log("FILE:", req.file);
-
     const notice = await Notice.create({
       title: req.body.title,
       description: req.body.description,
       isImportant: req.body.isImportant === "true",
-      attachment: req.file
-        ? `/uploads/notices/${req.file.filename}`
-        : null,
+      attachment: req.file ? req.file.path : null, // ✅ CLOUDINARY URL
     });
 
     res.status(201).json(notice);
   } catch (error) {
-    console.error(error);
+    console.error("Add notice error:", error);
     res.status(500).json({ message: "Failed to add notice" });
   }
 };
-
 
 // ================= GET ALL NOTICES =================
 exports.getAllNotices = async (req, res) => {
@@ -36,20 +30,19 @@ exports.getAllNotices = async (req, res) => {
 // ================= UPDATE NOTICE =================
 exports.updateNotice = async (req, res) => {
   try {
-    const { title, description, isImportant } = req.body;
+    const updateData = {
+      title: req.body.title,
+      description: req.body.description,
+      isImportant: req.body.isImportant === "true",
+    };
 
-    const attachment = req.file
-      ? `/uploads/notices/${req.file.filename}`
-      : undefined;
+    if (req.file) {
+      updateData.attachment = req.file.path; // ✅ CLOUDINARY URL
+    }
 
     const notice = await Notice.findByIdAndUpdate(
       req.params.id,
-      {
-        title,
-        description,
-        isImportant,
-        ...(attachment && { attachment }),
-      },
+      updateData,
       { new: true }
     );
 
@@ -59,6 +52,7 @@ exports.updateNotice = async (req, res) => {
 
     res.json(notice);
   } catch (error) {
+    console.error("Update notice error:", error);
     res.status(500).json({ message: "Failed to update notice" });
   }
 };

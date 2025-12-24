@@ -12,7 +12,6 @@ exports.addNotice = async (req, res) => {
 
     res.status(201).json(notice);
   } catch (error) {
-    console.error("Add notice error:", error);
     res.status(500).json({ message: "Failed to add notice" });
   }
 };

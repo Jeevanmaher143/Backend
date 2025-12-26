@@ -72,3 +72,21 @@ exports.updateApplicationStatus = async (req, res) => {
     res.status(500).json({ message: "Failed to update application" });
   }
 };
+
+/* ================= DELETE APPLICATION (ADMIN) ================= */
+exports.deleteApplication = async (req, res) => {
+  try {
+    const application = await ServiceApplication.findById(req.params.id);
+
+    if (!application) {
+      return res.status(404).json({ message: "Application not found" });
+    }
+
+    await application.deleteOne();
+
+    res.json({ message: "Application deleted successfully" });
+  } catch (error) {
+    console.error("DELETE APPLICATION ERROR 👉", error);
+    res.status(500).json({ message: "Failed to delete application" });
+  }
+};

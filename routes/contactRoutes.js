@@ -44,6 +44,17 @@ const {
 
 // PUBLIC
 router.get("/", getMembers);
+router.get("/top-members", async (req, res) => {
+  try {
+    const members = await Member.find({
+      role: { $in: ["sarpanch", "upsarpanch"] },
+    });
+    res.json(members);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch members" });
+  }
+});
+
 
 // ADMIN
 router.post(

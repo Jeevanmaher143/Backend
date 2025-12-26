@@ -3,7 +3,10 @@ const router = express.Router();
 
 const ServiceApplication = require("../models/ServiceApplication");
 const { protect, adminOnly } = require("../middlewares/authMiddleware");
-const { updateApplicationStatus } = require("../controllers/serviceController");
+const {
+  updateApplicationStatus,
+  deleteApplication,
+} = require("../controllers/serviceController");
 
 /* ===============================
    GET ALL SERVICE APPLICATIONS
@@ -29,6 +32,16 @@ router.put(
   protect,
   adminOnly,
   updateApplicationStatus
+);
+
+/* ===============================
+   DELETE APPLICATION (ADMIN)
+================================ */
+router.delete(
+  "/application/:id",
+  protect,
+  adminOnly,
+  deleteApplication
 );
 
 module.exports = router;

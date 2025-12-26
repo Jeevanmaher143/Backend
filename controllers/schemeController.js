@@ -13,7 +13,7 @@ exports.addScheme = async (req, res) => {
 // ================= GET ALL SCHEMES (PUBLIC) =================
 exports.getAllSchemes = async (req, res) => {
   try {
-    const schemes = await Scheme.find().sort({ createdAt: -1 });
+    const schemes = await Scheme.find().sort({ createdAt: -1 }).limit(10);
     res.json(schemes);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch schemes" });

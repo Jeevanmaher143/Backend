@@ -59,7 +59,7 @@ exports.addImage = async (req, res) => {
 // GET IMAGES
 exports.getImages = async (req, res) => {
   try {
-    const images = await Gallery.find().sort({ createdAt: -1 });
+    const images = await Gallery.find().sort({ createdAt: -1 }).limit(15);
     res.json(images);
   } catch (err) {
     res.status(500).json({ message: "Fetch failed" });

@@ -23,22 +23,19 @@ const fileFilter = (req, file, cb) => {
     "image/jpeg",
     "image/png",
     "image/jpg",
-    "application/pdf",
-    "application/msword",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   ];
 
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("Only images or PDF/DOC files allowed"), false);
+    cb(new Error("Only images  files allowed"), false);
   }
 };
 
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 10 * 1024 * 1024 }, // ✅ 5MB
+  limits: { fileSize: 500 * 1024 }, // ✅ 500kb
 });
 
 module.exports = upload;

@@ -7,7 +7,9 @@ exports.addNotice = async (req, res) => {
       title: req.body.title,
       description: req.body.description,
       isImportant: req.body.isImportant === "true",
-      attachment: req.file ? req.file.path : null, // ✅ CLOUDINARY URL
+    //  attachment: req.file ? req.file.path : null, // ✅ CLOUDINARY URL
+      attachment: req.file ? req.file.secure_url : null
+
     });
 
     res.status(201).json(notice);

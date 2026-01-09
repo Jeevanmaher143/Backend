@@ -3,10 +3,7 @@ const router = express.Router();
 
 const ServiceApplication = require("../models/ServiceApplication");
 const { protect, adminOnly } = require("../middlewares/authMiddleware");
-const {
-  updateApplicationStatus,
-  deleteApplication,
-} = require("../controllers/serviceController");
+const serviceController = require("../controllers/serviceController");
 
 /* ===============================
    GET ALL SERVICE APPLICATIONS
@@ -25,23 +22,23 @@ router.get("/", protect, adminOnly, async (req, res) => {
 });
 
 /* ===============================
-   UPDATE STATUS (APPROVE / REJECT)
+   UPDATE STATUS
 ================================ */
 router.put(
   "/:id/status",
   protect,
   adminOnly,
-  updateApplicationStatus
+  serviceController.updateApplicationStatus
 );
 
 /* ===============================
-   DELETE APPLICATION (ADMIN)
+   DELETE APPLICATION
 ================================ */
 router.delete(
   "/application/:id",
   protect,
   adminOnly,
-  deleteApplication
+  serviceController.deleteApplication
 );
 
 module.exports = router;

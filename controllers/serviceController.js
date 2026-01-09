@@ -1,7 +1,7 @@
 const ServiceApplication = require("../models/ServiceApplication");
 
 /* ================= USER APPLY ================= */
-exports.applyService = async (req, res) => {
+const applyService = async (req, res) => {
   try {
     const {
       serviceType,
@@ -17,14 +17,14 @@ exports.applyService = async (req, res) => {
     }
 
     const documents = {};
-    if (req.files) {
-      Object.keys(req.files).forEach((field) => {
-        documents[field] = req.files[field][0].path || req.files[field][0].secure_url;
+    if (req.files && Array.isArray(req.files)) {
+      req.files.forEach((file) => {
+        documents[file.fieldname] = file.path;
       });
     }
 
     const application = new ServiceApplication({
-      user: req.user.id,
+      user: req.user._id,
       serviceType,
       fullName,
       address,
@@ -48,7 +48,7 @@ exports.applyService = async (req, res) => {
 };
 
 /* ================= ADMIN UPDATE STATUS ================= */
-exports.updateApplicationStatus = async (req, res) => {
+const updateApplicationStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { status, adminRemark } = req.body;
@@ -73,8 +73,8 @@ exports.updateApplicationStatus = async (req, res) => {
   }
 };
 
-/* ================= DELETE APPLICATION (ADMIN) ================= */
-exports.deleteApplication = async (req, res) => {
+/* ================= DELETE APPLICATION ================= */
+const deleteApplication = async (req, res) => {
   try {
     const application = await ServiceApplication.findById(req.params.id);
 
@@ -89,4 +89,11 @@ exports.deleteApplication = async (req, res) => {
     console.error("DELETE APPLICATION ERROR 👉", error);
     res.status(500).json({ message: "Failed to delete application" });
   }
+};
+
+/* ================= EXPORTS (CRITICAL) ================= */
+module.exports = {
+  applyService,
+  updateApplicationStatus,
+  deleteApplication,
 };

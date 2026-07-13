@@ -115,6 +115,11 @@ const serviceApplicationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Indexes for the hot paths: user's own apps, admin list, status counts
+serviceApplicationSchema.index({ user: 1, createdAt: -1 });
+serviceApplicationSchema.index({ createdAt: -1 });
+serviceApplicationSchema.index({ status: 1 });
+
 module.exports = mongoose.model(
   "ServiceApplication",
   serviceApplicationSchema

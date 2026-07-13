@@ -47,6 +47,43 @@ const applyService = async (req, res) => {
   }
 };
 
+/* ================= USER: MY APPLICATIONS ================= */
+const getMyApplications = async (req, res) => {
+  try {
+    const applications = await ServiceApplication.find({ user: req.user._id })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    res.json(applications);
+  } catch (error) {
+    console.error("GET MY APPLICATIONS ERROR 👉", error);
+    res.status(500).json({ message: "Failed to fetch applications" });
+  }
+};
+
+/* ================= USER: CANCEL OWN APPLICATION ================= */
+const cancelMyApplication = async (req, res) => {
+  try {
+    const application = await ServiceApplication.findById(req.params.id);
+
+    if (!application) {
+      return res.status(404).json({ message: "Application not found" });
+    }
+
+    // Ownership check — a user may only cancel their OWN application
+    if (application.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    await application.deleteOne();
+
+    res.json({ message: "Application cancelled successfully" });
+  } catch (error) {
+    console.error("CANCEL APPLICATION ERROR 👉", error);
+    res.status(500).json({ message: "Failed to cancel application" });
+  }
+};
+
 /* ================= ADMIN UPDATE STATUS ================= */
 const updateApplicationStatus = async (req, res) => {
   try {
@@ -94,6 +131,8 @@ const deleteApplication = async (req, res) => {
 /* ================= EXPORTS (CRITICAL) ================= */
 module.exports = {
   applyService,
+  getMyApplications,
+  cancelMyApplication,
   updateApplicationStatus,
   deleteApplication,
 };

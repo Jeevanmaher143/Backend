@@ -5,10 +5,13 @@ const Complaint = require("../models/Complaint");
 
 exports.getDashboardStats = async (req, res) => {
   try {
-    const noticesCount = await Notice.countDocuments();
-    const servicesCount = await ServiceApplication.countDocuments();
-    const schemesCount = await Scheme.countDocuments();
-    const complaintsCount = await Complaint.countDocuments();
+    const [noticesCount, servicesCount, schemesCount, complaintsCount] =
+      await Promise.all([
+        Notice.countDocuments(),
+        ServiceApplication.countDocuments(),
+        Scheme.countDocuments(),
+        Complaint.countDocuments(),
+      ]);
 
     res.json({
       notices: noticesCount,

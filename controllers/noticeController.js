@@ -21,7 +21,7 @@ exports.addNotice = async (req, res) => {
 // ================= GET ALL NOTICES =================
 exports.getAllNotices = async (req, res) => {
   try {
-    const notices = await Notice.find().sort({ createdAt: -1 }).limit(6);
+    const notices = await Notice.find().sort({ createdAt: -1 }).limit(6).lean();
     res.json(notices);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch notices" });

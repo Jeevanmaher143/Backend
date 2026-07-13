@@ -12,7 +12,8 @@ router.get("/", protect, adminOnly, async (req, res) => {
   try {
     const services = await ServiceApplication.find()
       .populate("user", "fullName email village mobile")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .lean();
 
     res.json(services);
   } catch (error) {

@@ -35,6 +35,7 @@ const router = express.Router();
 
 const upload = require("../middlewares/uploadMiddleware");
 const { protect, adminOnly } = require("../middlewares/authMiddleware");
+const Contact = require("../models/Contact");
 const {
   addMember,
   getMembers,
@@ -46,9 +47,9 @@ const {
 router.get("/", getMembers);
 router.get("/top-members", async (req, res) => {
   try {
-    const members = await Member.find({
+    const members = await Contact.find({
       role: { $in: ["sarpanch", "upsarpanch"] },
-    });
+    }).lean();
     res.json(members);
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch members" });

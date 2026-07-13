@@ -3,7 +3,11 @@ const router = express.Router();
 
 const upload = require("../middlewares/uploadMiddleware");
 const { protect } = require("../middlewares/authMiddleware");
-const { applyService } = require("../controllers/serviceController");
+const {
+  applyService,
+  getMyApplications,
+  cancelMyApplication,
+} = require("../controllers/serviceController");
 
 // APPLY FOR ALL SERVICES
 router.post(
@@ -16,5 +20,11 @@ router.post(
   upload.any(), // ✅ ACCEPTS ALL FILE FIELDS
   applyService
 );
+
+// USER: view own applications (Application Status page)
+router.get("/user/applications", protect, getMyApplications);
+
+// USER: cancel own application (UserProfile "Cancel" button)
+router.delete("/application/:id", protect, cancelMyApplication);
 
 module.exports = router;

@@ -24,4 +24,6 @@ const schemeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+schemeSchema.index({ createdAt: -1 });
+
 module.exports = mongoose.model("Scheme", schemeSchema);

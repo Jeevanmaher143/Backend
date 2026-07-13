@@ -27,4 +27,6 @@ const developmentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+developmentSchema.index({ createdAt: -1 });
+
 module.exports = mongoose.model("Development", developmentSchema);

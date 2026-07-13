@@ -3,17 +3,13 @@ const ServiceApplication = require("../models/ServiceApplication");
 
 exports.getDashboardStats = async (req, res) => {
   try {
-    const totalProjects = await Development.countDocuments();
-
-    const totalApplications = await ServiceApplication.countDocuments();
-
-    const approvedDocs = await ServiceApplication.countDocuments({
-      status: "Approved",
-    });
-
-    const rejectedDocs = await ServiceApplication.countDocuments({
-      status: "Rejected",
-    });
+    const [totalProjects, totalApplications, approvedDocs, rejectedDocs] =
+      await Promise.all([
+        Development.countDocuments(),
+        ServiceApplication.countDocuments(),
+        ServiceApplication.countDocuments({ status: "Approved" }),
+        ServiceApplication.countDocuments({ status: "Rejected" }),
+      ]);
 
     res.json({
       totalProjects,

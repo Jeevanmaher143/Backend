@@ -11,7 +11,9 @@ exports.getUserProfile = async (req, res) => {
 
     const services = await ServiceApplication.find({
       user: req.user._id,
-    }).sort({ createdAt: -1 });
+    })
+      .sort({ createdAt: -1 })
+      .lean();
 
     res.status(200).json({ user, services });
   } catch (error) {

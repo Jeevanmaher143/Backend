@@ -26,4 +26,6 @@ const gallerySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+gallerySchema.index({ createdAt: -1 });
+
 module.exports = mongoose.model("Gallery", gallerySchema);

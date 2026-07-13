@@ -35,7 +35,7 @@ exports.addProject = async (req, res) => {
 // GET ALL PROJECTS
 exports.getProjects = async (req, res) => {
   try {
-    const projects = await Development.find().sort({ createdAt: -1 }).limit(6);
+    const projects = await Development.find().sort({ createdAt: -1 }).limit(6).lean();
     res.json(projects);
   } catch (error) {
     console.error("Get projects error:", error);

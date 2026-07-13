@@ -64,7 +64,7 @@ exports.addMember = async (req, res) => {
 
 // GET MEMBERS
 exports.getMembers = async (req, res) => {
-  const members = await Contact.find();
+  const members = await Contact.find().lean();
   res.json(members);
 };
 
